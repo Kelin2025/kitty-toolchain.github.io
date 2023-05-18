@@ -8,7 +8,7 @@ export default defineConfig({
   outDir: "docs/.vitepress/dist",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    nav: [{ text: "Home", link: "/" }],
+    nav: [],
 
     sidebar: [
       {

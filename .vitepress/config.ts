@@ -16,7 +16,7 @@ export default defineConfig({
         items: [{ text: "Dodec declarations", link: "/godot/about-dodec" }],
       },
       {
-        text: "Built-in DContexts",
+        text: "Built-in DContext classes",
         items: [
           { text: "Activator", link: "/godot/builtin-contexts/activator" },
           { text: "Area", link: "/godot/builtin-contexts/area" },

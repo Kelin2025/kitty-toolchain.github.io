@@ -4,13 +4,29 @@ Engine: Godot 4. Language: GDScript.
 
 I've written a custom library to describe game logic in a declarative way. I call it Dodec. The key point here is that it's an instruction, not a declaration that contains the instruction of what will be happening after its trigger.
 
-## DContext
+## Core classes
+
+## Built-in DContext classes
+
+There are various built-in DContext classes that act as building blocks for actions and perks. Follow the links to read more about them:
+
+- [ActivatorDContext](builtin-contexts/activator.md)
+- [AreaDContext](builtin-contexts/area.md)
+- [ChargesDContext](builtin-contexts/charges.md)
+- [CooldownDContext](builtin-contexts/cooldown.md)
+- [DamageDealerDContext](builtin-contexts/damage-dealer.md)
+- [ProjectileSpawnerDContext](builtin-contexts/projectile-spawner.md)
+- [RemoteAreaDContext](builtin-contexts/remote-area.md)
+- [TargetStoreDContext](builtin-contexts/target-store.md)
+- [AttackSpeedDContext](builtin-contexts/attack-speed.md)
+
+### DContext
 
 It's a class that contains Dodec declaration and some other instances.
 
 Example:
 
-```
+```gd
 extends DContext
 
 # Pipes
@@ -34,11 +50,11 @@ func _bindings_initialized():
 
 ```
 
-## DTrigger
+### DTrigger
 
-The first key thing is the DTrigger class:
+The first key thing is the `DTrigger` class:
 
-```
+```gd
 class_name DTrigger
 
 func trigger(payload, declaration):
@@ -48,15 +64,15 @@ func trigger(payload, declaration):
 
 ```
 
-The DTrigger instance itself doesn't call its trigger method on instance creation. It gets called by `declaration.trigger()`. I create various operators by extending from the DTrigger class and writing specific triggers.
+The `DTrigger` instance itself doesn't call its trigger method on instance creation. It gets called by `declaration.trigger(payload)`. I create various operators by extending from the DTrigger class and writing specific triggers.
 
-## DDeclaration
+### DDeclaration
 
-DDeclaration is a class that accepts an array of DTrigger instances and stores them. It has a trigger method to trigger all DTrigger instances.
+`DDeclaration` is a class that accepts an array of DTrigger instances and stores them. It has a trigger method to trigger all DTrigger instances.
 
 Template of a declaration:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -76,11 +92,11 @@ Let's take a look at some of the most commonly used triggers. They all are inher
 
 ### DApply
 
-DApply accepts a Callable as an argument and calls it whenever DApply is triggered.
+`DApply` accepts a function as an argument and calls it whenever `DApply` is triggered.
 
 Example of a GDScript code for a Dodec declaration that prints declaration payload upon declaration trigger:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -100,7 +116,7 @@ Accepts an array of triggers and calls them one after another with the response 
 
 Example of a GDScript code for a Dodec declaration that adds 1 to declaration trigger's payload, multiplies it by 2, and then prints the result:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -124,7 +140,7 @@ Calls all passed triggers with its payload, returns an array of their responses.
 
 Example of a GDScript code for a Dodec declaration that takes declaration trigger's payload, separately adds 1 to it, subtracts 1 from it, and multiplies it by 2, and then prints all the results:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -151,7 +167,7 @@ Checks if every trigger in `If` returns `true` and triggers `Then` pipe. Otherwi
 
 `Then` and `Else` parameters are optional, but at least one should be present
 
-```jsx
+```gd
 extends DContext
 
 func setup_declaration():
@@ -180,7 +196,7 @@ This trigger always returns a value passed to the constructor.
 
 Example of a GDScript code for a Dodec declaration that prints 99 upon declaration trigger:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -199,11 +215,11 @@ func _bindings_initialized():
 
 ### DMapper
 
-The same as DApply but returns a value.
+The same as `DApply` but returns a value.
 
 Example of a GDScript code for a Dodec declaration that increments declaration payload and prints it upon trigger:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -222,11 +238,11 @@ func _bindings_initialized():
 
 ### DEvent
 
-This trigger has a triggered signal which is called with payload upon call. Use DSubscribe that will be called whenever DEvent is triggered.
+This trigger has a triggered signal which is called with payload upon call. Use DSubscribe that will be called whenever `DEvent` is triggered.
 
 Example of a GDScript code for a Dodec declaration that has a "Started" event that gets called upon declaration trigger, and a subscription to this event that prints event payload:
 
-```
+```gd
 extends DContext
 
 @onready var started = DEvent.new()
@@ -249,11 +265,11 @@ func _bindings_initialized():
 
 ### DState
 
-Creates a state. Use DState.get_value(node) to get its value. Use DState.set_value(node, pipe) to update value.
+Creates a state. Use `DState.get_value(state)` to get its value. Use `DState.set_value(state, pipe)` to update value.
 
 Example of a declaration that increments counter upon button_pressed and prints counter value:
 
-```
+```gd
 extends DContext
 
 @onready var counter = DState.new(0)
@@ -278,9 +294,9 @@ func setup_declaration():
 
 ### DCommand
 
-Accepts a callable and calls it upon trigger.
+Accepts a class method and calls it upon trigger.
 
-```
+```gd
 extends DContext
 
 @onready var print_payload = DCommand.new(_print_payload)
@@ -301,11 +317,11 @@ func _bindings_initialized():
 
 ### DSubscribe
 
-Subscribes to a specific DEvent and calls passed triggers upon this DEvent call. DSubscribe instance is created through a static method `to`. `to` accepts DEvent instance, subscribes to its triggered signal, and executes do pipe. Method `do` accepts an array of triggers and creates a DPipe from them that will be triggered upon the specified DEvent call.
+Subscribes to a specific `DEvent` and calls passed triggers upon this DEvent call. `DSubscribe` instance is created through a static method `to`. `to` accepts `DEvent` instance, subscribes to its triggered signal, and executes do pipe. Method `do` accepts an array of triggers and creates a DPipe from them that will be triggered upon the specified `DEvent` call.
 
 Example of GDScript code for a Dodec declaration with incremented event that is being called upon declaration trigger, and a subscription to this event that prints 6:
 
-```
+```gd
 extends DContext
 
 @onready var incremented = DEvent.new()
@@ -331,21 +347,22 @@ func _bindings_initialized():
 
 The GDScript code for a Dodec declaration that calls started event with 1 as payload, multiplies it by 2, and prints the result, will look like this:
 
-```
+```gd
 extends DContext
 
 @onready var started = DEvent.new()
 
 func setup_declaration():
-  DSubscribe.to(started).do([
-    DApply.new(func (payload): return payload * 2),
-    DApply.new(func (payload): print(payload))
-  ]),
-  DPipe.new([
-    DStatic.new(1),
-    started
+  return DDeclaration.new([
+    DSubscribe.to(started).do([
+      DApply.new(func (payload): return payload * 2),
+      DApply.new(func (payload): print(payload))
+    ]),
+    DPipe.new([
+      DStatic.new(1),
+      started
+    ])
   ])
-])
 
 func _bindings_initialized():
   # Will print 2
@@ -359,7 +376,7 @@ Here we declare started event and create a subscription that prints the payload 
 
 The GDScript code for a Dodec declaration that subtracts 1 from the trigger payload and prints "LOL" if the resulting number is even will look like this:
 
-```
+```gd
 extends DContext
 
 func setup_declaration():
@@ -380,17 +397,3 @@ func _bindings_initialized():
   # Won't print anything
   declaration.trigger(2)
 ```
-
-## Built-in DContext classes
-
-There are various built-in DContext classes that act as building blocks for actions and perks. Follow the links to read more about them:
-
-- [Activator](builtin-contexts/activator.md)
-- [Area](builtin-contexts/area.md)
-- [Charges](builtin-contexts/charges.md)
-- [Cooldown](builtin-contexts/cooldown.md)
-- [DamageDealer](builtin-contexts/damage-dealer.md)
-- [ProjectileSpawner](builtin-contexts/projectile-spawner.md)
-- [RemoteArea](builtin-contexts/remote-area.md)
-- [TargetStore](builtin-contexts/target-store.md)
-- [AttackSpeed](builtin-contexts/attack-speed.md)

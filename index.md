@@ -9,5 +9,5 @@ hero:
   actions:
     - theme: brand
       text: About Dodec Declaration
-      link: /markdown-examples
+      link: /godot/about-dodec
 ---

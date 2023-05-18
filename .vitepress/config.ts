@@ -4,6 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Kitty Toolchain",
   description: "Docs",
+  base: "https://kitty-toolchain.github.io/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [{ text: "Home", link: "/" }],

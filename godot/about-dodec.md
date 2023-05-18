@@ -391,6 +391,6 @@ There are various built-in DContext classes that act as building blocks for acti
 - [Cooldown](builtin-contexts/cooldown.md)
 - [DamageDealer](builtin-contexts/damage-dealer.md)
 - [ProjectileSpawner](builtin-contexts/projectile-spawner.md)
-- [RemoteArea](builtin-contexts/remote-arae.md)
+- [RemoteArea](builtin-contexts/remote-area.md)
 - [TargetStore](builtin-contexts/target-store.md)
 - [AttackSpeed](builtin-contexts/attack-speed.md)

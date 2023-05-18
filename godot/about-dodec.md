@@ -4,8 +4,6 @@ Engine: Godot 4. Language: GDScript.
 
 I've written a custom library to describe game logic in a declarative way. I call it Dodec. The key point here is that it's an instruction, not a declaration that contains the instruction of what will be happening after its trigger.
 
-## Core classes
-
 ## Built-in DContext classes
 
 There are various built-in DContext classes that act as building blocks for actions and perks. Follow the links to read more about them:
@@ -19,6 +17,8 @@ There are various built-in DContext classes that act as building blocks for acti
 - [RemoteAreaDContext](builtin-contexts/remote-area.md)
 - [TargetStoreDContext](builtin-contexts/target-store.md)
 - [AttackSpeedDContext](builtin-contexts/attack-speed.md)
+
+## Core classes
 
 ### DContext
 
